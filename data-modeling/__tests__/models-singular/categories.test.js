@@ -10,7 +10,7 @@ beforeEach(() => {
 
 describe('Categories Model (Singular)', () => {
 
-  // TODO - handle both the happy path and edge cases
+  // TODO - handle edge cases
   const testCategory = {
     name: 'Test Category',
     description: 'A category for testing.'
@@ -48,9 +48,23 @@ describe('Categories Model (Singular)', () => {
   });
 
   it('can update() a category', () => {
+    expect.assertions(1);
+    const updates = {name: 'Updated Category'};
+    return categories.create(testCategory)
+      .then(savedCategory => categories.update(savedCategory._id, updates))
+      .then(originalCategory => categories.get(originalCategory._id))
+      .then(updatedCategory => {
+        expect(updatedCategory['name']).toEqual(updates['name']);
+      });
   });
 
   it('can delete() a category', () => {
+    expect.assertions(1);
+    return categories.create(testCategory)
+      .then(savedCategory => categories.delete(savedCategory._id))
+      .then(deletedCategory => categories.get(deletedCategory._id))
+      .then(retrievedCategory => {
+        expect(retrievedCategory).toBeNull();
+      });
   });
-
 });
