@@ -2,15 +2,53 @@
 
 const mongoose = require('mongoose');
 
-// Require your model
+const Categories = require('./models-singular/categories');
 
-// Mongoose Server URI
+// TODO - Verify URI endpoint
 const MONGOOSE_URI = 'mongodb://localhost:27017/class05';
+mongoose.connect(MONGOOSE_URI, { useNewUrlParser: true });
 
-// Connect
-mongoose.connect(...);
+const categories = new Categories();
 
-// Do some work
+const categoryOne = {
+  name: 'Category One',
+  description: 'The first category'
+};
+const categoryTwo = {
+  name: 'Category Two',
+  description: 'The second category'
+};
 
-// Disconnect
+let catOneId;
+let catTwoId;
+
+console.log(`Adding categories...`);
+categories.create(categoryOne)
+  .then(savedCategory => {
+    console.log(`Added category: ${savedCategory}`);
+    catOneId = savedCategory._id;
+    return categories.create(categoryTwo);
+  })
+  .then(savedCategory => {
+    console.log(`Added category: ${savedCategory}`);
+    catTwoId = savedCategory._id;
+    return categories.get();
+  })
+  .then(allCategories => {
+    console.log(`All categories: ${allCategories}`);
+    console.log(`Updating category...`);
+    return categories.update(catOneId, {name: 'Updated Category One'});
+  })
+  .then(() => categories.get(catOneId))
+  .then(updatedCategory => {
+    console.log(`Updated category: ${updatedCategory}`);
+    console.log(`Deleting category...`);
+    return categories.delete(catOneId);
+  })
+  .then(() => categories.get())
+  .then(allCategories => {
+    console.log(`All categories: ${allCategories}`);
+  })
+  .catch(console.error);
+
 mongoose.disconnect();
