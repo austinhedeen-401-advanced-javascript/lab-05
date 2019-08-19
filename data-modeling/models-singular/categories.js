@@ -1,31 +1,42 @@
 'use strict';
 
-// Where is our schema defined?
-// How do we get it in here so we can run methods on it?
+const mongooseModel = require('./categories-schema');
 
+// Spec: You must implement the following model interface methods: get() create() update() delete()
+// TODO - Could this be a static class? Class instances don't appear to be necessary.
 class Categories {
 
   constructor() {
   }
 
   get(_id) {
-    // Call the appropriate mongoose method to get
-    // one or more records
     // If 1, return it as a plain object
     // If 2, return it as an object like this:
     // { count: ##, results: [{}, {}] }
+    if (_id) {
+      return mongooseModel.findById(_id);
+    }
+
+    return mongooseModel.find()
+      .then(results => ({ count: results.length, results }))
+      .catch(error => Promise.reject(new Error(error)));
   }
 
   create(record) {
-    // Call the appropriate mongoose method to create a new record
+    const newRecord = new mongooseModel(record);
+    return newRecord.save();
   }
 
   update(_id, record) {
-    // Call the appropriate mongoose method to update a record
+    return mongooseModel.findByIdAndUpdate(_id, record);
   }
 
   delete(_id) {
-    // Call the appropriate mongoose method to delete a record
+    return mongooseModel.findByIdAndDelete(_id);
+  }
+
+  deleteAll() {
+    return mongooseModel.deleteMany({});
   }
 
 }
