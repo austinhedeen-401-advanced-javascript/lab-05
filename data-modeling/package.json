@@ -5,7 +5,9 @@
   "main": "players-schema.js",
   "scripts": {
     "test": "jest --verbose",
-    "test-watch": "jest --watchAll --verbose"
+    "test-watch": "jest --watchAll --verbose",
+    "start-db": "mkdir -p ./.db && mongod --dbpath ./.db",
+    "start-db-win": "mkdir -p ./.db && mongod.exe --dbpath ./.db"
   },
   "jest": {
     "testEnvironment": "node"
