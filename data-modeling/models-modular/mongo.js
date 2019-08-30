@@ -17,7 +17,13 @@ class Model {
    * @returns {count:#,results:[{*}]} | {*}
    */
   get(_id) {
+    if (_id) {
+      return this.schema.findById(_id);
+    }
 
+    return this.schema.find()
+      .then(results => ({ count: results.length, results }))
+      .catch(error => Promise.reject(new Error(error)));
   }
 
   /**
@@ -26,7 +32,8 @@ class Model {
    * @returns {*}
    */
   create(record) {
-
+    const newRecord = new this.schema(record);
+    return newRecord.save();
   }
 
   /**
@@ -36,16 +43,24 @@ class Model {
    * @returns {*}
    */
   update(_id, record) {
-
+    return this.schema.findByIdAndUpdate(_id, record);
   }
 
   /**
-   * Deletes a recod in the model
+   * Deletes a record in the model
    * @param _id {string} Mongo Record ID
    * @returns {*}
    */
   delete(_id) {
+    return this.schema.findByIdAndDelete(_id);
+  }
 
+  /**
+   * Deletes all records in the model
+   * @returns {*}
+   */
+  deleteAll() {
+    return this.schema.deleteMany({});
   }
 
 }
