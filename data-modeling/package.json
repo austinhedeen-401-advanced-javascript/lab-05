@@ -1,0 +1,26 @@
+{
+  "name": "models",
+  "version": "1.0.0",
+  "description": "",
+  "main": "players-schema.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest --verbose",
+    "test-watch": "jest --watchAll --verbose",
+    "start-db": "mkdir -p ./.db && mongod --dbpath ./.db",
+    "start-db-win": "mkdir -p ./.db && mongod.exe --dbpath ./.db"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^24.8.0",
+    "mongodb-memory-server": "^5.1.5",
+    "mongoose": "^5.6.1",
+    "supertest": "^4.0.2",
+    "uuid": "^3.3.2"
+  }
+}
